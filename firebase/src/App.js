@@ -1,14 +1,15 @@
-import "./App.css";
+
+import React from "react";
 import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Signup from "./components/Signup";
+import AuthProvider from "./context/AuthContext";
+import RequireAuth from "./context/RequireAuth";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
-import UpdateProfile from "./components/UpdateProfile";
+import Signup from "./components/Signup";
 import ForgotPassword from "./components/ForgotPassword";
-import AuthProvider from "./context/AuthContext";
-
-function App() {
+import UpdateProfile from "./components/UpdateProfile";
+const App = () => {
   return (
     <Container
       className="d-flex align-items-center justify-content-center"
@@ -17,19 +18,25 @@ function App() {
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Router>
           <AuthProvider>
-          <Routes>
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/update-profile" element={<UpdateProfile />} />
-            <Route path="/" element={<Dashboard />} />
-          </Routes>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                }
+              />
+              <Route path="/update-profile" element={<UpdateProfile />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+            </Routes>
           </AuthProvider>
-         
         </Router>
       </div>
     </Container>
   );
-}
+};
 
 export default App;
